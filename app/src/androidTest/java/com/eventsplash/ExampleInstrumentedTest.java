@@ -1,4 +1,4 @@
-package com.example.jonathanhavstad.eventsplash;
+package com.eventsplash;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.jonathanhavstad.eventsplash", appContext.getPackageName());
+        assertEquals("com.eventsplash", appContext.getPackageName());
     }
 }

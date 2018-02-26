@@ -2,6 +2,7 @@ package com.eventsplash.home;
 
 import android.content.Context;
 import android.location.Location;
+import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,8 @@ public class HomePageFragment extends HomeFragment
         homePageFragment.setArguments(args);
         return homePageFragment;
     }
+
+
 
     @Override
     protected void updateCurrentPosition(Location location) {

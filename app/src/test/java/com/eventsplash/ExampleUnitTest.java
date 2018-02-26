@@ -1,4 +1,4 @@
-package com.example.jonathanhavstad.eventsplash;
+package com.eventsplash;
 
 import org.junit.Test;
 

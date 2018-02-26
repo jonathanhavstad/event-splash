@@ -7,7 +7,6 @@ import com.eventsplash.base.Lifecycle;
 import com.eventsplash.model.eventbright.events.Event;
 import com.eventsplash.networking.EventBriteRequestManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +26,14 @@ public class HomeViewModel implements HomeContract.ViewModel {
 
     private HomeContract.View viewCallback;
 
-    public HomeViewModel(Context context) {
-        this.eventBriteRequestManager = new EventBriteRequestManager(context);
+    public HomeViewModel(String eventBriteBaseURL,
+                         String eventBriteAuthToken,
+                         String eventBriteSearchAPIPath,
+                         String eventBriteVenueAPIPath) {
+        this.eventBriteRequestManager = new EventBriteRequestManager(eventBriteBaseURL,
+                eventBriteAuthToken,
+                eventBriteSearchAPIPath,
+                eventBriteVenueAPIPath);
     }
 
     @Override

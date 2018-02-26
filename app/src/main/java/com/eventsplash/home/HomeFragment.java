@@ -29,7 +29,16 @@ public abstract class HomeFragment extends BaseFragment implements HomeContract.
         } else {
             fineLocationPermissionGranted = false;
         }
-        homeViewModel = new HomeViewModel(getActivity());
+
+        String eventBriteBaseURL = getActivity().getString(R.string.event_brite_base_url);
+        String eventBriteAuthToken = getActivity().getString(R.string.event_brite_auth_token);
+        String eventBriteSearchAPIPath = getActivity().getString(R.string.event_brite_search_api_path);
+        String eventBriteVenueAPIPath = getActivity().getString(R.string.event_brite_venue_api_path);
+
+        homeViewModel = new HomeViewModel(eventBriteBaseURL,
+                eventBriteAuthToken,
+                eventBriteSearchAPIPath,
+                eventBriteVenueAPIPath);
         if (fineLocationPermissionGranted) {
             try {
                 defaultSearchRadius = getActivity().getResources().getInteger(R.integer.default_search_radius);

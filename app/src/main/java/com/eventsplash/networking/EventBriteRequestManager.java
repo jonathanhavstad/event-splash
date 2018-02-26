@@ -31,13 +31,16 @@ public class EventBriteRequestManager {
 
     private Map<String, Event> venueIDToEventMap;
 
-    public EventBriteRequestManager(Context context) {
+    public EventBriteRequestManager(String eventBriteBaseURL,
+                                    String eventBriteAuthToken,
+                                    String eventBriteSearchAPIPath,
+                                    String eventBriteVenueAPIPath) {
         eventBriteComponent =
                 DaggerEventBriteComponent.builder()
-                        .eventBriteModule(new EventBriteModule(context.getString(R.string.event_brite_base_url),
-                                context.getString(R.string.event_brite_auth_token),
-                                context.getString(R.string.event_brite_search_api_path),
-                                context.getString(R.string.event_brite_venue_api_path)))
+                        .eventBriteModule(new EventBriteModule(eventBriteBaseURL,
+                                eventBriteAuthToken,
+                                eventBriteSearchAPIPath,
+                                eventBriteVenueAPIPath))
                         .build();
         eventBriteSearchAPIService = eventBriteComponent.providesEventBriteSearchApiService();
         eventBriteVenueAPIService = eventBriteComponent.providesEventBriteVenueAPIService();
