@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Event Splash</string>
+    <string name="action_login">Login</string>
+    <string name="event_brite_base_url">https://www.eventbriteapi.com/v3/</string>
+    <string name="event_brite_auth_token">H7F64OEURMM4B6QBKUAY</string>
+    <string name="event_brite_search_api_path">events/search/</string>
+    <string name="fine_location_granted_bundle_arg_key">fine_location_granted</string>
+    <string name="event_brite_venue_api_path">venues/</string>
+    <string name="open_drawer">open_drawer</string>
+    <string name="close_drawer">close_drawer</string>
+</resources>
