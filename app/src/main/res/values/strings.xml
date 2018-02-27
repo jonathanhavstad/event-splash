@@ -8,4 +8,5 @@
     <string name="event_brite_venue_api_path">venues/</string>
     <string name="open_drawer">open_drawer</string>
     <string name="close_drawer">close_drawer</string>
+    <string name="fingerprint_reader_text">Put your finger on the sensor and lift after you feel a vibration</string>
 </resources>
