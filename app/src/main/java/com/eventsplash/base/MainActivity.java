@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0
@@ -117,7 +119,11 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 View mainContentView = findViewById(R.id.main_content);
                 Snackbar.make(mainContentView, "Allow access to GPS", Snackbar.LENGTH_LONG)
-                        .setAction("ACCEPT", v -> {})
+                        .setAction("ACCEPT", v -> {
+                            ActivityCompat.requestPermissions(this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_ACCESS_FINE_LOCATION);
+                        })
                         .show();
             } else {
                 ActivityCompat.requestPermissions(this,
