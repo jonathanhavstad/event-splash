@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.CancellationSignal;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
@@ -35,7 +37,11 @@ public class FingerprintHandler extends
                 PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+        manager.authenticate(cryptoObject,
+                cancellationSignal,
+                0,
+                this,
+                null);
     }
 
     @Override
