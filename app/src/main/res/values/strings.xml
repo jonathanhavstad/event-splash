@@ -9,4 +9,8 @@
     <string name="open_drawer">open_drawer</string>
     <string name="close_drawer">close_drawer</string>
     <string name="fingerprint_reader_text">Put your finger on the sensor and lift after you feel a vibration</string>
+    <string name="login_text">LOGIN</string>
+    <string name="login_status_pref_name">login_status</string>
+    <string name="logged_in_pref_name">logged_in</string>
+    <string name="logout_text">LOGOUT</string>
 </resources>
