@@ -13,7 +13,7 @@ import android.widget.Button;
 
 import com.eventsplash.R;
 import com.eventsplash.login.FingerprintLoginActivity;
-import com.eventsplash.model.eventbright.EventWithVenue;
+import com.eventsplash.eventdetail.models.EventWithVenue;
 import com.eventsplash.model.eventbright.events.SearchResults;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class HomeListFragment extends HomeFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_events, container, false);
         RecyclerView eventsListView = view.findViewById(R.id.events_list);
-        homeListAdapter = new HomeListAdapter();
+        homeListAdapter = new HomeListAdapter(this::launchEventDetailFragment);
         eventsListView.setAdapter(homeListAdapter);
         loginButton = view.findViewById(R.id.login_button);
         loginListener = v -> {
@@ -139,7 +139,6 @@ public class HomeListFragment extends HomeFragment {
         loginButton.setOnClickListener(loginListener);
         loginButton.setText(R.string.login_text);
     }
-
 
     private boolean isUserLoggedIn() {
         return getContext()

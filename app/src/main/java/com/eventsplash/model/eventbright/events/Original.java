@@ -1,6 +1,11 @@
 
 package com.eventsplash.model.eventbright.events;
 
+import android.databinding.BindingAdapter;
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -40,4 +45,8 @@ public class Original {
         this.height = height;
     }
 
+    @BindingAdapter({"bind:url"})
+    public static void loadImage(ImageView view, String url) {
+        Glide.with(view.getContext()).load(url).into(view);
+    }
 }

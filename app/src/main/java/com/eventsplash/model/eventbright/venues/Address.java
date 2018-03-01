@@ -1,6 +1,8 @@
 
 package com.eventsplash.model.eventbright.venues;
 
+import android.text.TextUtils;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -40,6 +42,10 @@ public class Address {
     @SerializedName("localized_multi_line_address_display")
     @Expose
     private List<String> localizedMultiLineAddressDisplay = null;
+
+    private String address1AndAddress2;
+
+    private String cityStateZip;
 
     public String getAddress1() {
         return address1;
@@ -129,4 +135,29 @@ public class Address {
         this.localizedMultiLineAddressDisplay = localizedMultiLineAddressDisplay;
     }
 
+    public String getAddress1AndAddress2() {
+        if (TextUtils.isEmpty(address1AndAddress2)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(address1);
+            if (address2 != null && !TextUtils.isEmpty(address2.toString())) {
+                sb.append("\n");
+                sb.append(address2);
+            }
+            address1AndAddress2 = sb.toString();
+        }
+        return address1AndAddress2;
+    }
+
+    public String getCityStateZip() {
+        if (TextUtils.isEmpty(cityStateZip)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(city);
+            sb.append(", ");
+            sb.append(region);
+            sb.append(" ");
+            sb.append(postalCode);
+            cityStateZip = sb.toString();
+        }
+        return cityStateZip;
+    }
 }

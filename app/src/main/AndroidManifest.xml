@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.FingerprintLoginActivity"/>
+        <activity android:name=".eventdetail.EventDetailActivity"/>
     </application>
 
 </manifest>

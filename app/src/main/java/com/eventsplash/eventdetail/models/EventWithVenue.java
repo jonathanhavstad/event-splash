@@ -1,4 +1,4 @@
-package com.eventsplash.model.eventbright;
+package com.eventsplash.eventdetail.models;
 
 import com.eventsplash.model.eventbright.events.Event;
 import com.eventsplash.model.eventbright.venues.Venue;

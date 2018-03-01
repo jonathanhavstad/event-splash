@@ -1,10 +1,8 @@
 package com.eventsplash.networking;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.eventsplash.R;
-import com.eventsplash.model.eventbright.EventWithVenue;
+import com.eventsplash.eventdetail.models.EventWithVenue;
 import com.eventsplash.model.eventbright.events.Event;
 import com.eventsplash.model.eventbright.events.SearchResults;
 import com.eventsplash.model.eventbright.venues.Venue;

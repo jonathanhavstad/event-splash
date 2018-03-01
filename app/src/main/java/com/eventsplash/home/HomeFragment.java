@@ -1,5 +1,6 @@
 package com.eventsplash.home;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.eventsplash.R;
 import com.eventsplash.base.BaseFragment;
 import com.eventsplash.base.Lifecycle;
+import com.eventsplash.eventdetail.models.EventWithVenue;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -17,6 +19,19 @@ import com.google.android.gms.location.LocationServices;
 public abstract class HomeFragment extends BaseFragment implements HomeContract.View {
     protected HomeViewModel homeViewModel;
     protected int defaultSearchRadius;
+    protected OnLaunchEventDetail onLaunchEventDetail;
+
+    public interface OnLaunchEventDetail {
+        void launchEventDetail(EventWithVenue eventWithVenue);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnLaunchEventDetail) {
+            onLaunchEventDetail = (OnLaunchEventDetail) context;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +84,12 @@ public abstract class HomeFragment extends BaseFragment implements HomeContract.
                         updateCurrentPosition(location);
                     }
                 });
+    }
+
+    protected void launchEventDetailFragment(EventWithVenue eventWithVenue) {
+        if (onLaunchEventDetail != null) {
+            onLaunchEventDetail.launchEventDetail(eventWithVenue);
+        }
     }
 
     protected abstract void updateCurrentPosition(Location location);

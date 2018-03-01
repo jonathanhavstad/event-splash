@@ -124,7 +124,7 @@ public class FingerprintLoginActivity extends AppCompatActivity {
                             Intent usernameData = new Intent();
                             usernameData.putExtra(getString(R.string.username_extra_key),
                                     usernameEdit.getText().toString());
-                            setResult(RESULT_OK);
+                            setResult(RESULT_OK, usernameData);
                             finish();
                         } else {
                             Snackbar.make(mainContentView, "Please input a username", Snackbar.LENGTH_LONG)

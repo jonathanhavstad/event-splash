@@ -2,14 +2,13 @@ package com.eventsplash.home;
 
 import android.content.Context;
 import android.location.Location;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.eventsplash.R;
-import com.eventsplash.model.eventbright.EventWithVenue;
+import com.eventsplash.eventdetail.models.EventWithVenue;
 import com.eventsplash.model.eventbright.events.SearchResults;
 import com.eventsplash.model.eventbright.venues.Venue;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -105,7 +104,8 @@ public class HomePageFragment extends HomeFragment
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
+        EventWithVenue eventWithVenue = (EventWithVenue) marker.getTag();
+        launchEventDetailFragment(eventWithVenue);
     }
 
     private void addMarker(Venue venue) {
@@ -114,7 +114,9 @@ public class HomePageFragment extends HomeFragment
         try {
             double latitude = Double.valueOf(latitudeSrc);
             double longitude = Double.valueOf(longitudeSrc);
-            addMarker(latitude, longitude, "", venue.getName());
+            EventWithVenue eventWithVenue = new EventWithVenue();
+            eventWithVenue.setVenue(venue);
+            addMarker(latitude, longitude, eventWithVenue);
         } catch (NumberFormatException nfe) {
 
         }
@@ -128,8 +130,7 @@ public class HomePageFragment extends HomeFragment
             double longitude = Double.valueOf(longitudeSrc);
             addMarker(latitude,
                     longitude,
-                    eventWithVenue.getEvent().getName().getText(),
-                    eventWithVenue.getVenue().getName());
+                    eventWithVenue);
         } catch (NumberFormatException nfe) {
 
         }
@@ -137,14 +138,16 @@ public class HomePageFragment extends HomeFragment
 
     private void addMarker(double latitude,
                            double longitude,
-                           String eventName,
-                           String venueName) {
+                           EventWithVenue eventWithVenue) {
         if (map != null) {
+            String eventName = eventWithVenue.getEvent().getName().getText();
+            String venueName = eventWithVenue.getVenue().getName();
             LatLng eventPoint = new LatLng(latitude, longitude);
-            map.addMarker(new MarkerOptions()
+            Marker marker = map.addMarker(new MarkerOptions()
                     .position(eventPoint)
                     .title(eventName)
                     .snippet(venueName));
+            marker.setTag(eventWithVenue);
         }
     }
 }

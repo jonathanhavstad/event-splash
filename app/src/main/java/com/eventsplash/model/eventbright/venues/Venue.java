@@ -94,5 +94,4 @@ public class Venue {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
-
 }

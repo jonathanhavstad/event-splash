@@ -17,4 +17,8 @@
     <string name="username_extra_key">username</string>
     <string name="logged_in_username_pref_name">logged_in_username</string>
     <string name="username_pref_name">username</string>
+    <string name="detail_when_header">When:</string>
+    <string name="detail_where_header">Where:</string>
+    <string name="event_detail_binder_key">event_detail_binder</string>
+    <string name="event_detail_bundle_key">event_detail_bundle</string>
 </resources>
