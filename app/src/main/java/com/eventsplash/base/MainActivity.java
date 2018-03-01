@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -88,9 +87,7 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_login) {
-            return true;
-        } else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
