@@ -13,4 +13,8 @@
     <string name="login_status_pref_name">login_status</string>
     <string name="logged_in_pref_name">logged_in</string>
     <string name="logout_text">LOGOUT</string>
+    <string name="username_hint">Username</string>
+    <string name="username_extra_key">username</string>
+    <string name="logged_in_username_pref_name">logged_in_username</string>
+    <string name="username_pref_name">username</string>
 </resources>

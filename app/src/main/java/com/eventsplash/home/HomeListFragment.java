@@ -94,16 +94,24 @@ public class HomeListFragment extends HomeFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LOGIN_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                login();
+                if (data != null) {
+                    String username = data.getStringExtra(getString(R.string.username_extra_key));
+                    login(username);
+                }
             }
         }
     }
 
-    private void login() {
+    private void login(String username) {
         getContext()
                 .getSharedPreferences(getString(R.string.login_status_pref_name), 0)
                 .edit()
                 .putBoolean(getString(R.string.logged_in_pref_name), true)
+                .apply();
+        getContext()
+                .getSharedPreferences(getString(R.string.logged_in_username_pref_name), 0)
+                .edit()
+                .putString(getString(R.string.username_pref_name), username)
                 .apply();
         applyLogin();
     }
@@ -118,6 +126,11 @@ public class HomeListFragment extends HomeFragment {
                 .getSharedPreferences(getString(R.string.login_status_pref_name), 0)
                 .edit()
                 .putBoolean(getString(R.string.logged_in_pref_name), false)
+                .apply();
+        getContext()
+                .getSharedPreferences(getString(R.string.logged_in_username_pref_name), 0)
+                .edit()
+                .putString(getString(R.string.username_pref_name), null)
                 .apply();
         applyLogout();
     }

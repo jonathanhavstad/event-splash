@@ -2,12 +2,14 @@ package com.eventsplash.login;
 
 import android.Manifest;
 import android.app.KeyguardManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -29,11 +31,16 @@ public class FingerprintLoginActivity extends AppCompatActivity {
     private KeyguardManager keyguardManager;
     private FingerprintLoginComponent fingerprintLoginComponent;
     private FingerprintManager.CryptoObject cryptoObject;
+    private TextInputEditText usernameEdit;
+    private View mainContentView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fingerprint_login);
+
+        mainContentView = findViewById(R.id.fingerprint_view);
+        usernameEdit = findViewById(R.id.username_edit);
 
         keyguardManager =
                 (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
@@ -52,7 +59,6 @@ public class FingerprintLoginActivity extends AppCompatActivity {
                 PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.USE_FINGERPRINT)) {
-                View mainContentView = findViewById(R.id.fingerprint_view);
                 Snackbar.make(mainContentView, "Allow access to Fingerprint Reader", Snackbar.LENGTH_LONG)
                         .setAction("ACCEPT", v -> {
                             ActivityCompat.requestPermissions(this,
@@ -104,21 +110,38 @@ public class FingerprintLoginActivity extends AppCompatActivity {
             cryptoObject =
                     new FingerprintManager.CryptoObject(fingerprintLoginComponent.providesCipher());
 
-            FingerprintHandler helper = new FingerprintHandler(this,
-                    new FingerprintHandler.OnAuthenticationEvent() {
-                        @Override
-                        public void authenticationSucceeded() {
+            startAuth(fingerprintManager, cryptoObject);
+        }
+    }
+
+    private void startAuth(FingerprintManager fingerprintManager,
+                           FingerprintManager.CryptoObject cryptoObject) {
+        FingerprintHandler helper = new FingerprintHandler(this,
+                new FingerprintHandler.OnAuthenticationEvent() {
+                    @Override
+                    public void authenticationSucceeded() {
+                        if (!usernameEdit.getText().toString().isEmpty()) {
+                            Intent usernameData = new Intent();
+                            usernameData.putExtra(getString(R.string.username_extra_key),
+                                    usernameEdit.getText().toString());
                             setResult(RESULT_OK);
                             finish();
+                        } else {
+                            Snackbar.make(mainContentView, "Please input a username", Snackbar.LENGTH_LONG)
+                                    .setAction("OK", v -> {
+                                        usernameEdit.requestFocus();
+                                        startAuth(fingerprintManager, cryptoObject);
+                                    })
+                                    .show();
                         }
+                    }
 
-                        @Override
-                        public void authenticationFailed() {
-                            setResult(RESULT_CANCELED);
-                            finish();
-                        }
-                    });
-            helper.startAuth(fingerprintManager, cryptoObject);
-        }
+                    @Override
+                    public void authenticationFailed() {
+                        setResult(RESULT_CANCELED);
+                        finish();
+                    }
+                });
+        helper.startAuth(fingerprintManager, cryptoObject);
     }
 }
