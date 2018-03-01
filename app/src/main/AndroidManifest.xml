@@ -28,7 +28,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.FingerprintLoginActivity"/>
-        <activity android:name=".eventdetail.EventDetailActivity"/>
+        <activity android:name=".eventdetail.EventDetailActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <provider
+            android:authorities="com.eventsplash.providers"
+            android:name="com.eventsplash.providers.FavoritesProvider"/>
     </application>
 
 </manifest>

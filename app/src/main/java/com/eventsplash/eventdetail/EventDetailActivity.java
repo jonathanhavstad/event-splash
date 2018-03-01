@@ -2,9 +2,14 @@ package com.eventsplash.eventdetail;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.eventsplash.R;
 import com.eventsplash.databinding.ActivityDetailBinding;
@@ -35,5 +40,33 @@ public class EventDetailActivity extends AppCompatActivity {
         ActivityDetailBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_detail);
         binding.setEventWithVenue(eventWithVenue);
+
+        Toolbar toolbar = binding.getRoot().findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(eventWithVenue.getEvent().getName().getText());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
