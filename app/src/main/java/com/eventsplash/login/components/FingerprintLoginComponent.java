@@ -2,7 +2,12 @@ package com.eventsplash.login.components;
 
 import com.eventsplash.login.modules.FingerprintLoginModule;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.inject.Singleton;
 
 import dagger.Component;
 
@@ -12,6 +17,5 @@ import dagger.Component;
 
 @Component(modules = FingerprintLoginModule.class)
 public interface FingerprintLoginComponent {
-    boolean providesIsCipherInitialized();
     Cipher providesCipher();
 }

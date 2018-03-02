@@ -3,6 +3,7 @@ package com.eventsplash.eventdetail.models;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -111,34 +112,38 @@ public class EventWithVenue implements View.OnClickListener {
                     null);
             if (c != null) {
                 if (0 < c.getCount()) {
-                    Drawable favoriteDrawable = ContextCompat.getDrawable(context,
-                            R.drawable.ic_favorite_border_white_24dp);
-                    imageView.setImageDrawable(favoriteDrawable);
                     context.getContentResolver().delete(FavoritesProvider.CONTENT_URI,
                             FavoritesProvider.SEARCH_BY_USER_NAME_AND_EVENT_NAME_SELECTION,
                             new String[] {getUsername(context), getEvent().getName().getText()});
-                } else {
                     Drawable favoriteDrawable = ContextCompat.getDrawable(context,
-                            R.drawable.ic_favorite_white_24dp);
+                            R.drawable.ic_favorite_border_white_24dp);
                     imageView.setImageDrawable(favoriteDrawable);
-
+                } else {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(FavoritesProvider._USER_NAME, getUsername(context));
                     contentValues.put(FavoritesProvider._EVENT_NAME, event.getName().getText());
                     context.getContentResolver().insert(FavoritesProvider.CONTENT_URI,
                             contentValues);
+                    Drawable favoriteDrawable = ContextCompat.getDrawable(context,
+                            R.drawable.ic_favorite_white_24dp);
+                    imageView.setImageDrawable(favoriteDrawable);
                 }
                 c.close();
             } else {
-                Drawable favoriteDrawable = ContextCompat.getDrawable(context,
-                        R.drawable.ic_favorite_white_24dp);
-                imageView.setImageDrawable(favoriteDrawable);
+                try {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(FavoritesProvider._USER_NAME, getUsername(context));
+                    contentValues.put(FavoritesProvider._EVENT_NAME, event.getName().getText());
 
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(FavoritesProvider._USER_NAME, getUsername(context));
-                contentValues.put(FavoritesProvider._EVENT_NAME, event.getName().getText());
-                context.getContentResolver().insert(FavoritesProvider.CONTENT_URI,
-                        contentValues);
+                    context.getContentResolver().insert(FavoritesProvider.CONTENT_URI,
+                            contentValues);
+
+                    Drawable favoriteDrawable = ContextCompat.getDrawable(context,
+                            R.drawable.ic_favorite_white_24dp);
+                    imageView.setImageDrawable(favoriteDrawable);
+                } catch (SQLException sqlException) {
+
+                }
             }
         }
     }

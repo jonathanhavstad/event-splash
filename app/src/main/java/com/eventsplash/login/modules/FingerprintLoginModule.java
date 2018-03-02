@@ -36,9 +36,12 @@ public class FingerprintLoginModule {
     private boolean cipherInitialized;
 
     private final String keyStoreProvider;
+    private final boolean requireUserAuth;
 
-    public FingerprintLoginModule(String keyStoreProvider) {
+    public FingerprintLoginModule(String keyStoreProvider,
+                                  boolean requireUserAuth) {
         this.keyStoreProvider = keyStoreProvider;
+        this.requireUserAuth = requireUserAuth;
         generateKey();
         cipherInitialized = cipherInit();
     }
@@ -68,7 +71,8 @@ public class FingerprintLoginModule {
                     KeyProperties.PURPOSE_ENCRYPT |
                             KeyProperties.PURPOSE_DECRYPT)
                     .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
+                    .setUserAuthenticationRequired(requireUserAuth)
+                    .setUserAuthenticationValidityDurationSeconds(60 * 60 * 24 * 365)
                     .setEncryptionPaddings(
                             KeyProperties.ENCRYPTION_PADDING_PKCS7)
                     .build());

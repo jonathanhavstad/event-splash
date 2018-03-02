@@ -3,16 +3,23 @@ package com.eventsplash.providers;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
+import com.eventsplash.login.FingerprintLoginActivity;
 import com.eventsplash.providers.databases.FavoritesDatabaseHelper;
+
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 
 /**
  * Created by jonathanhavstad on 3/1/18.
@@ -32,8 +39,6 @@ public class FavoritesProvider extends ContentProvider {
 
     private FavoritesDatabaseHelper favoritesDatabaseHelper;
 
-    private static final String DBNAME = "user_db";
-
     public static final String _ID = "_id";
     public static final String _USER_NAME = "user_name";
     public static final String _EVENT_NAME = "event_name";
@@ -45,25 +50,20 @@ public class FavoritesProvider extends ContentProvider {
                     " AND " +
                     SEARCH_BY_EVENT_NAME_SELECTION;
 
-    private SQLiteDatabase db;
-
     @Override
     public boolean onCreate() {
-        favoritesDatabaseHelper = new FavoritesDatabaseHelper(
-            getContext(),
-            DBNAME,
-            null,
-            1
-        );
-        db = favoritesDatabaseHelper.getWritableDatabase();
-        return db != null;
+        favoritesDatabaseHelper = new FavoritesDatabaseHelper();
+        return init();
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(FavoritesDatabaseHelper.FAVORITES_TBNAME);
+        if (!favoritesDatabaseHelper.databaseReady()) {
+            if (!init()) {
+                navigateToLoginPage();
+            }
+        }
 
         switch (sUriMatcher.match(uri)) {
             case 1:
@@ -71,9 +71,16 @@ public class FavoritesProvider extends ContentProvider {
             default:
         }
 
-        Cursor c = qb.query(db,	projection,	selection,
-                selectionArgs,null, null, sortOrder);
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+        Cursor c = favoritesDatabaseHelper.query(FavoritesDatabaseHelper.FAVORITES_TBNAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+        if (c != null) {
+            c.setNotificationUri(getContext().getContentResolver(), uri);
+        }
         return c;
     }
 
@@ -86,7 +93,13 @@ public class FavoritesProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        long rowID = db.insert(FavoritesDatabaseHelper.FAVORITES_TBNAME, "", values);
+        if (!favoritesDatabaseHelper.databaseReady()) {
+            if (!init()) {
+                navigateToLoginPage();
+            }
+        }
+
+        long rowID = favoritesDatabaseHelper.insert(FavoritesDatabaseHelper.FAVORITES_TBNAME, "", values);
 
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
@@ -99,10 +112,16 @@ public class FavoritesProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        if (!favoritesDatabaseHelper.databaseReady()) {
+            if (!init()) {
+                navigateToLoginPage();
+            }
+        }
+
         int count = 0;
         switch (sUriMatcher.match(uri)){
             case 1:
-                count = db.delete(FavoritesDatabaseHelper.FAVORITES_TBNAME, selection, selectionArgs);
+                count = favoritesDatabaseHelper.delete(FavoritesDatabaseHelper.FAVORITES_TBNAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -115,5 +134,24 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         return 0;
+    }
+
+    private boolean init() {
+        try {
+            favoritesDatabaseHelper.init(getContext());
+        } catch (InvalidKeyException |
+                UnsupportedEncodingException |
+                BadPaddingException |
+                IllegalBlockSizeException |
+                RuntimeException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private void navigateToLoginPage() {
+        Toast.makeText(getContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
+        Intent loginActivity = new Intent(getContext(), FingerprintLoginActivity.class);
+        getContext().startActivity(loginActivity);
     }
 }

@@ -103,15 +103,14 @@ public class FingerprintLoginActivity extends AppCompatActivity {
         }
 
         fingerprintLoginComponent = DaggerFingerprintLoginComponent.builder()
-                .fingerprintLoginModule(new FingerprintLoginModule("AndroidKeyStore"))
+                .fingerprintLoginModule(new FingerprintLoginModule("AndroidKeyStore",
+                        false))
                 .build();
 
-        if (fingerprintLoginComponent.providesIsCipherInitialized()) {
-            cryptoObject =
-                    new FingerprintManager.CryptoObject(fingerprintLoginComponent.providesCipher());
+        cryptoObject =
+                new FingerprintManager.CryptoObject(fingerprintLoginComponent.providesCipher());
 
-            startAuth(fingerprintManager, cryptoObject);
-        }
+        startAuth(fingerprintManager, cryptoObject);
     }
 
     private void startAuth(FingerprintManager fingerprintManager,
